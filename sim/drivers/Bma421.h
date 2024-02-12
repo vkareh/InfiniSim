@@ -41,6 +41,9 @@ namespace Pinetime {
 
       // lv_sim: returned by Process(), public to be modified by main.cpp
       uint32_t steps = 0;
+      int16_t x = 0;
+      int16_t y = 0;
+      int16_t z = 0;
 
     private:
       void Reset();

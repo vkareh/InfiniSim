@@ -21,7 +21,7 @@ namespace Pinetime {
       void Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps);
 
       int16_t X() const {
-        return x;
+        return xHistory[0];
       }
 
       int16_t Y() const {
@@ -30,6 +30,10 @@ namespace Pinetime {
 
       int16_t Z() const {
         return zHistory[0];
+      }
+
+      bool SleepValue() const {
+        return sleepValue;
       }
 
       uint32_t NbSteps() const {
@@ -70,17 +74,22 @@ namespace Pinetime {
       uint32_t nbSteps = 0;
       uint32_t currentTripSteps = 0;
 
+      bool sleepValue = 0;
+
 //      TickType_t lastTime = 0;
 //      TickType_t time = 0;
 
       struct AccelStats {
         static constexpr uint8_t numHistory = 2;
 
+        int16_t xMean = 0;
         int16_t yMean = 0;
         int16_t zMean = 0;
+        int16_t prevXMean = 0;
         int16_t prevYMean = 0;
         int16_t prevZMean = 0;
 
+        uint32_t xVariance = 0;
         uint32_t yVariance = 0;
         uint32_t zVariance = 0;
       };
@@ -89,9 +98,8 @@ namespace Pinetime {
 
       AccelStats stats = {};
 
-      int16_t lastX = 0;
-      int16_t x = 0;
       static constexpr uint8_t histSize = 8;
+      Utility::CircularBuffer<int16_t, histSize> xHistory = {};
       Utility::CircularBuffer<int16_t, histSize> yHistory = {};
       Utility::CircularBuffer<int16_t, histSize> zHistory = {};
       int32_t accumulatedSpeed = 0;

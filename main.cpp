@@ -462,6 +462,7 @@ public:
         dateTimeController.SetCurrentTime(std::chrono::system_clock::now());
 
         systemTask.Start();
+        systemTask.PushMessage(Pinetime::System::Messages::DisableSleeping);
 
         // initialize the first LVGL screen
         //const auto clockface = settingsController.GetClockFace();
@@ -689,6 +690,9 @@ public:
       debounce('l', 'L', state[SDL_SCANCODE_L], key_handled_l);
       debounce('p', 'P', state[SDL_SCANCODE_P], key_handled_p);
       debounce('s', 'S', state[SDL_SCANCODE_S], key_handled_s);
+      debounce('x', 'X', state[SDL_SCANCODE_X], key_handled_x);
+      debounce('y', 'Y', state[SDL_SCANCODE_Y], key_handled_y);
+      debounce('z', 'Z', state[SDL_SCANCODE_Z], key_handled_z);
       debounce('h', 'H', state[SDL_SCANCODE_H], key_handled_h);
       debounce('i', 'I', state[SDL_SCANCODE_I], key_handled_i);
       debounce('w', 'W', state[SDL_SCANCODE_W], key_handled_w);
@@ -774,6 +778,18 @@ public:
         } else {
           motionSensor.steps = 0;
         }
+      } else if (key == 'x') {
+        motionSensor.x += 5 * 0x10;
+      } else if (key == 'X') {
+        motionSensor.x -= 5 * 0x10;
+      } else if (key == 'y') {
+        motionSensor.y += 5 * 0x10;
+      } else if (key == 'Y') {
+        motionSensor.y -= 5 * 0x10;
+      } else if (key == 'z') {
+        motionSensor.z += 5 * 0x10;
+      } else if (key == 'Z') {
+        motionSensor.z -= 5 * 0x10;
       } else if (key == 'h') {
         if (heartRateController.State() == Pinetime::Controllers::HeartRateController::States::Stopped) {
           heartRateController.Start();
@@ -944,7 +960,7 @@ public:
         displayApp.StartApp(Pinetime::Applications::Apps::Clock, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
       }
       else if (screen_idx == 3) {
-        settingsController.SetWatchFace(Pinetime::Applications::WatchFace::PineTimeStyle);
+        settingsController.SetWatchFace(Pinetime::Applications::WatchFace::Terminal);
         displayApp.StartApp(Pinetime::Applications::Apps::Clock, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
       }
       else if (screen_idx == 4) {
@@ -985,6 +1001,9 @@ public:
       }
       else if (screen_idx == 17) {
         displayApp.StartApp(Pinetime::Applications::Apps::PassKey, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
+      }
+      else if (screen_idx == 18) {
+        displayApp.StartApp(Pinetime::Applications::Apps::Weather, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
       }
       else {
         std::cout << "unhandled screen_idx: " << int(screen_idx) << std::endl;
@@ -1069,6 +1088,9 @@ private:
     bool key_handled_l = false; // l ... increase brightness level, L ... lower brightness level
     bool key_handled_p = false; // p ... enable print memory usage, P ... disable print memory usage
     bool key_handled_s = false; // s ... increase step count, S ... decrease step count
+    bool key_handled_x = false; // x ... increase x angle, X ... decrease x angle
+    bool key_handled_y = false; // y ... increase y angle, Y ... decrease y angle
+    bool key_handled_z = false; // z ... increase z angle, Z ... decrease z angle
     bool key_handled_h = false; // h ... set heartrate running, H ... stop heartrate
     bool key_handled_i = false; // i ... take screenshot, I ... start/stop Gif screen capture
     bool key_handled_w = false; // w ... generate weather data, W ... clear weather data

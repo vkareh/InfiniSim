@@ -111,7 +111,21 @@ Bma421::Values Bma421::Process() {
 //
 //  // X and Y axis are swapped because of the way the sensor is mounted in the PineTime
 //  return {steps, data.y, data.x, data.z};
-  return {steps, 0, 0, 0};
+  auto limit = 180 * 0x10;
+  if (x > limit)
+    x = limit;
+  if (x < -limit)
+    x = -limit;
+  if (y > limit)
+    y = limit;
+  if (y < -limit)
+    y = -limit;
+  if (z > limit)
+    z = limit;
+  if (z < -limit)
+    z = -limit;
+
+  return {steps, x, y, z};
 }
 bool Bma421::IsOk() const {
   return isOk;
